@@ -3,23 +3,23 @@ class SessionsController < ApplicationController
   end
   
   def create
-    # TODO: authenticate user
     @user = User.find_by({"email" => params["email"]})
     if @user != nil
-      redirect_to "/login"
-      flash["notice"] = "No user found"
       #2 if user exists, check if they know their password
       if BCrypt::Password.new(@user["password"]) == params["password"]
-        #3 if they know their password, login successful
-        #add cookie fo ruser
-   #add a cookie for this user
-  cookies["monster"] = "cookie added"
-  session["user_id"] = @user["id"]
-  flash["notice"] = "Welcome."
-  redirect_to "/posts"
-  else
-
-  end
+      #3 if they know their password, login successful
+      cookies["monster"] = "cookie added"
+      session["user_id"] = @user["id"]
+      flash["notice"] = "Welcome."
+      redirect_to "/posts"
+      else
+        flash["notice"] = "Unsuccessful login."
+        redirect_to "/login"
+      end
+    else
+      flash ["notice"] = "Unsuccessful login."
+    redirect_to "/login"
+end
 end
 
 # In app/controllers/sessions_controller.rb, authenticate a user:
