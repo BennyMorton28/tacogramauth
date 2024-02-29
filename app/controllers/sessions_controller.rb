@@ -7,20 +7,31 @@ class SessionsController < ApplicationController
     if @user != nil
       #2 if user exists, check if they know their password
       if BCrypt::Password.new(@user["password"]) == params["password"]
-      #3 if they know their password, login successful
-      cookies["monster"] = "cookie added"
-      session["user_id"] = @user["id"]
-      flash["notice"] = "Welcome."
-      redirect_to "/posts"
+        #3 if they know their password, login successful
+        cookies["user_id"] = @user["id"].to_s  
+        session["user_id"] = @user["id"]
+        flash["notice"] = "Welcome."
+        redirect_to "/posts"
       else
-        flash["notice"] = "Unsuccessful login."
+        flash["notice"] = "Incorrect password."
         redirect_to "/login"
       end
     else
-      flash ["notice"] = "Unsuccessful login."
-    redirect_to "/login"
+      flash["notice"] = "No user exists with this email."
+      redirect_to "/login"
+    end
 end
+
+def destroy
+  #logout user
+  session["user_id"] = nil
+  cookies.delete("user_id")
+  flash["notice"] = "See ya later."
+  redirect_to "/login"
 end
+
+end
+
 
 # In app/controllers/sessions_controller.rb, authenticate a user:
 # find user by email.

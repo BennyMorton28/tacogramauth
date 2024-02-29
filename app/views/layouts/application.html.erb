@@ -17,19 +17,42 @@
       <div class="col-3 text-end">
         <!-- TODO: if logged in user, hide Login and Sign Up -->
         <!-- TODO: if logged in user, show user's first name and Logout button -->
+        
+        <%@user = User.find_by({"id" => cookies["user_id"]})%>
+
+        <% if @user == nil %>
+        
         <a href="/login" class="btn btn-default">Login</a> |
+
         <a href="/users/new" class="btn btn-default">Signup</a>
-        Hey, You |
+
+        <%else%>
+
+        Hey, <%=@user["first_name"]%> |
+
         <a href="/logout" class="btn btn-default">Logout</a>
+
+        <%end%>
       </div>
     </div>
 
     <div class="row">
       <div class="col">
+      
         <h1 class="display-6 mb-4">Tacostagram</h1>
       </div>
       <div class="col-2 text-end">
+
+        <% if @user == nil %>
+
+        <p>You must login to create a new post!</p>
+
+        <%else%>
+
         <a href="/posts/new/" class="btn btn-success">New Post</a>
+
+        <%end%>
+
       </div>
     </div>
 
